@@ -25,7 +25,7 @@
 ##########################################################################
 */
 
-$_language->readModule('sponsors');
+$_language->readModule('sponsors', false, true);
 
 if (!ispageadmin($userID) || mb_substr(basename($_SERVER[ 'REQUEST_URI' ]), 0, 15) != "admincenter.php") {
     die($_language->module[ 'access_denied' ]);
@@ -47,7 +47,7 @@ if ($action == "add") {
     $CAPCLASS->createTransaction();
     $hash = $CAPCLASS->getHash();
 
-    $_language->readModule('bbcode', true);
+    $_language->readModule('bbcode', true, true);
 
     $addbbcode = $GLOBALS["_template"]->replaceTemplate("addbbcode", array());
     $addflags = $GLOBALS["_template"]->replaceTemplate("flags_admin", array());
@@ -144,7 +144,7 @@ if ($action == "add") {
     $CAPCLASS->createTransaction();
     $hash = $CAPCLASS->getHash();
 
-    $_language->readModule('bbcode', true);
+    $_language->readModule('bbcode', true, true);
 
     $addbbcode = $GLOBALS["_template"]->replaceTemplate("addbbcode", array());
     $addflags = $GLOBALS["_template"]->replaceTemplate("flags_admin", array());
@@ -344,9 +344,9 @@ if ($action == "add") {
         if (count($errors)) {
             $errors = array_unique($errors);
             echo generateErrorBoxFromArray($_language->module['errors_there'], $errors);
+        } else {
+            redirect("admincenter.php?site=sponsors", "", 0);
         }
-
-        redirect("admincenter.php?site=sponsors", "", 0);
     } else {
         echo $_language->module[ 'transaction_invalid' ];
     }
@@ -467,9 +467,9 @@ if ($action == "add") {
         if (count($errors)) {
             $errors = array_unique($errors);
             echo generateErrorBoxFromArray($_language->module['errors_there'], $errors);
+        } else {
+            redirect("admincenter.php?site=sponsors", "", 0);
         }
-
-        redirect("admincenter.php?site=sponsors", "", 0);
     } else {
         echo $_language->module[ 'transaction_invalid' ];
     }
