@@ -2775,3 +2775,8 @@ function updateLanguages($_database)
     }
     return rmdir($dir);
 }
+
+function removedotINSTALL()
+{
+    unlink('../.INSTALL');
+}
