@@ -84,6 +84,7 @@ function update_clearfolder($_database)
     }
 }
 
+/** fixme */
 function updateMySQLConfig()
 {
     global $_language;
@@ -2737,7 +2738,6 @@ function update_updateLanguages($_database)
 {
     # update languages in database
 
-    include("../src/func/filesystem.php");
     global $_database;
     $transaction = new Transaction($_database);
     $transaction->addQuery("UPDATE `" . PREFIX . "news_languages` SET lang = 'af' WHERE lang = 'za'");
@@ -2763,8 +2763,13 @@ function update_updateLanguages($_database)
     } else {
         return array('status' => 'fail', 'message' => 'Failed to update languages<br/>' . $transaction->getError());
     }
+}
 
+function update_obsoleteLanguages()
+{
     # remove obsolete language folders
+
+    include("../src/func/filesystem.php");
 
     $obsLangs = array("../languages/cz", "../languages/dk", "../languages/il", "../languages/ir", "../languages/se");
     foreach ($obsLangs as $dir) {
@@ -2776,13 +2781,13 @@ function update_updateLanguages($_database)
     $dir = "../admin/languages";
     $remove_admin = @rm_recursive($dir);
     if ($remove_admin) {
-        return array('status' => 'success', 'message' => 'Removed /admin/languages');
+        return array('status' => 'success', 'message' => 'Removed obsolete languages');
     } else {
-        return array('status' => 'fail', 'message' => 'Failed to remove /admin/languages');
+        return array('status' => 'fail', 'message' => 'Failed to remove obsolete languages');
     }
 }
 
-function update_removedotINSTALL()
+function update_removeInstall()
 {
     if (unlink('../.INSTALL')) {
         return array('status' => 'success', 'message' => 'Removed .INSTALL');
