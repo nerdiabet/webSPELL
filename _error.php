@@ -25,22 +25,31 @@
 ##########################################################################
 */
 
+ob_start();
+
 function generateCallTrace()
 {
-    $e = new Exception();
-    $trace = explode("\n", str_replace($_SERVER['DOCUMENT_ROOT'], '', $e->getTraceAsString()));
-    $trace = array_reverse($trace);
-    array_shift($trace);
-    array_pop($trace);
-    array_pop($trace);
-    $length = count($trace);
-    $result = array();
 
-    for ($i = 0; $i < $length; $i++) {
-        $result[] = ($i + 1)  . ')' . substr($trace[$i], strpos($trace[$i], ' '));
+    $trace = debug_backtrace();
+    $trace = array_reverse($trace);
+    array_pop($trace);
+    array_pop($trace);
+    $basepath = realpath(dirname(__FILE__)).DIRECTORY_SEPARATOR;
+    $result = array();
+    for ($i=0; $i < count($trace); $i++) {
+        $line  = str_replace($basepath, '', $trace[$i]['file']);
+        $line .= '('.$trace[$i]['line']."): ";
+        $line .= "<b>".$trace[$i]['function']."</b>(";
+        $params = array();
+        foreach ($trace[$i]['args'] as $param) {
+            $params[] = htmlspecialchars(var_export(str_replace($basepath, '', $param), true));
+        }
+        $line .= implode(", ", $params);
+        $line .= ")";
+        $result[] = $line;
     }
 
-    return "\t" . implode("\n\t", $result);
+    return implode("\n", $result);
 }
 
 function system_error($text, $system = 1, $strace = 0)
@@ -78,20 +87,6 @@ function system_error($text, $system = 1, $strace = 0)
 <title>webSPELL - Error</title>
 <link href="components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="_stylesheet.css" rel="stylesheet">
-<style>
-/* centered columns styles */
-.row-centered {
-    text-align:center;
-}
-.col-centered {
-    display:inline-block;
-    float:none;
-    /* reset the text-align */
-    text-align:left;
-    /* inline-block space fix */
-    margin-right:-4px;
-}
-</style>
 <!-- end Head & Title include -->
 </head>
 <body>
@@ -108,7 +103,7 @@ function system_error($text, $system = 1, $strace = 0)
 <div class="container">
     <div class="row row-centered">
         <!-- main content area -->
-        <div class="col-xs-12 col-sm-6 col-md-8 col-centered">
+        <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2">
             <div>
                 <div class="alert alert-danger" role="alert"><strong>An error has occured</strong></div>
             </div>
