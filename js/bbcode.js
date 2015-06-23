@@ -857,6 +857,16 @@ $( document ).ready( function() {
                 "time",
                 window.SHOUTBOX_REFRESH_TIME );
     }
+
+    $(".navbar-header .navbar-toggle" ).on( "click", function ( ) {
+        var target = $( this ).data( "target" ),
+            toggleClass = $( this ).data( "toggle" );
+
+        console.log(target, toggleClass);
+
+        $( target )
+            .toggleClass( toggleClass );
+    } );
 } );
 
 loadLanguageModule( "bbcode" );

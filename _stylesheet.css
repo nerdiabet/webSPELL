@@ -121,8 +121,22 @@ body {
     text-decoration: underline;
 }
 
-@media (min-width:768px) {
-    .dropdown:hover .dropdown-menu {
-        display: block;
+#maincol {
+}
+
+@media (max-width:767px) {
+    .ws-main-wrapper .ws-offcanvas-nav {
+        position: absolute;
+        background: white;
+        margin-top: -20px;
+        transform: translateX(-100%);
+        transition: 0.3s;
+        z-index: 1;
+        box-shadow: none;
+    }
+
+    .ws-main-wrapper.ws-offcanvas-nav-active .ws-offcanvas-nav {
+        transform: translateX(0);
+        box-shadow: 5px 0 10px black;
     }
 }
